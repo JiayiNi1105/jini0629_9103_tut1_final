@@ -1,4 +1,3 @@
-
 let appleMax = 12;
 let appleInterval = 500; // Delay between apples
 
