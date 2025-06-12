@@ -1,78 +1,76 @@
-//Empty array of balls 
-let balls = []
 
-//Setup function to generate start position of trunk
-function setup() {
-  createCanvas(1200, 1200)
-  let trunk = new Circles(width/2, height - height/3, 50)
-  trunk.generateTrunk()
-}
+let appleMax = 12;
+let appleInterval = 500; // Delay between apples
 
-//Draw function for display ball function
-function draw() {
-  background(222)
-
-    for (let ball of balls) {
-    ball.display();
-    }
-}
-
-//Circles class storing information of each ball
-class Circles {
-
-  constructor(starterXPos, starterYPos, starterDiameter){
-    this.ballXPos = starterXPos
-    this.ballYPos = starterYPos
-    this.ballDiameter = starterDiameter
-    
-    //stored random colors with min/max of browns for trunk
-    this.colorTop = color(random(60, 100), random(40, 70), random(20, 50));
-    this.colorBottom = color(random(100, 150), random(60, 100), random(30, 80));
-
-    this.StrokeColor = color(0)
-    this.StrokeWeight = 0
+function setupApples(baseX, baseY) {
+  balls = [];
+  for (let i = 0; i < branchLines.length && i < appleMax; i++) {
+    let b = branchLines[i];
+    let delay = trunkMax * trunkInterval + i * appleInterval;
+    let x = baseX + cos(b.angle) * b.len;
+    let y = baseY + sin(b.angle) * b.len;
+    balls.push({ x, y, born: growthStartTime + delay });
   }
-  
-  //generate trunk function, logic
-  generateTrunk() {
-    const segments = 5
-    let y = this.ballYPos 
-    let x = this.ballXPos
-    let prevD = this.ballDiameter
-    
-    //push initial ball
-    balls.push(this)
+}
 
-    //logic to keep balls connected
-    for (let i=0; i<segments; i++){
-      let newD = Math.round(random(20, 100))
-      //change y pos of next ball by radius of previous ball + new ball
-      y -= (prevD/2 + newD/2) 
-      balls.push(new Circles(x, y, newD))
-      prevD = newD
-  
+function drawApples() {
+  for (let b of balls) {
+    let age = millis() - b.born;
+    let t = constrain(age / 800, 0, 1);
+    let grow = sin(t * PI);
+
+    push();
+    translate(b.x, b.y);
+    scale(grow);
+    stroke(0);
+    strokeWeight(1);
+
+    fill('#C3695D');
+    arc(0, 0, 20, 20, PI / 2, PI * 3 / 2, PIE);
+
+    fill('#2AA25E');
+    arc(0, 0, 20, 20, PI * 3 / 2, PI / 2, PIE);
+    pop();
+  }
+}
+
+// Integration hook inside drawBranches()
+function drawBranches() {
+  let x = width / 2;
+  let offsetY = 60;
+  let scaleFactor = 1.1;
+  let baseTop = height - 160 * scaleFactor + offsetY;
+  let topY = baseTop - (trunkMax - 1) * 40 * scaleFactor;
+  let branchLength = 80;
+
+  if (branchLines.length < branchMax) {
+    let now = millis();
+    if (now - growthStartTime >= branchLines.length * branchInterval) {
+      let angle = map(branchLines.length, 0, branchMax - 1, -PI / 2.5, PI / 2.5);
+      let length = branchLength + random(-20, 20);
+      branchLines.push({ angle: angle, len: length, born: now });
     }
   }
 
+  push();
+  translate(x, topY);
+  stroke(50);
+  strokeWeight(2);
+  for (let b of branchLines) {
+    let age = millis() - b.born;
+    let t = constrain(age / 800, 0, 1);
+    let ease = sin(t * PI);
+    let len = b.len * ease;
+    let x2 = cos(b.angle) * len;
+    let y2 = sin(b.angle) * len;
+    line(0, 0, x2, y2);
+  }
+  pop();
 
-  display() {
-
-    push()
-
-    translate(this.ballXPos, this.ballYPos)
-
-    stroke(this.StrokeColor)
-    strokeWeight(this.StrokeWeight)
-
-    fill(this.colorTop)
-    arc(0,0, this.ballDiameter, this.ballDiameter, PI/2, (3*PI)/2, PIE)
-
-    fill(this.colorBottom)
-    arc(0,0, this.ballDiameter, this.ballDiameter, (3*PI)/2, PI/2)
-
-
-    pop()
-    
+  // Setup apples once when all branches are drawn
+  if (branchLines.length === branchMax && balls.length === 0) {
+    setupApples(x, topY);
   }
 
+  drawApples();
 }
