@@ -31,6 +31,8 @@ class Circles {
     for (let i = 0; i < segments; i++) {
       let newD = Math.round(random(10, 80));
       y -= (prevD / 2 + newD / 2);
+      // Keep trunk within screen bounds
+      y = constrain(y, newD / 2, height - newD / 2);
       let bornTime = trunkGrowthStart + (i + 1) * branchGrowDelay;
       balls.push(new Circles(x, y, newD, null, null, bornTime));
       prevD = newD;
@@ -67,8 +69,15 @@ class Circles {
       let interpolatedTop = lerpColor(baseTop, colorPair[0], lerpAmt);
       let interpolatedBottom = lerpColor(baseBottom, colorPair[1], lerpAmt);
 
-      x += cos(angle) * (prevD / 2 + newD / 2);
-      y += sin(angle) * (prevD / 2 + newD / 2);
+      let newX = x + cos(angle) * (prevD / 2 + newD / 2);
+      let newY = y + sin(angle) * (prevD / 2 + newD / 2);
+      
+      // Keep circles within screen bounds
+      newX = constrain(newX, newD / 2, width - newD / 2);
+      newY = constrain(newY, newD / 2, height - newD / 2);
+      
+      x = newX;
+      y = newY;
 
       let jitter = random(-PI / 10, PI / 10);
       angle += jitter;
