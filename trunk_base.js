@@ -56,4 +56,3 @@ function drawTrunk() {
     pop();
   }
 }
-
