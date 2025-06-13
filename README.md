@@ -10,7 +10,6 @@ The animation runs continuously, with growth, transformation, and restarting pha
 No mouse, keyboard, or audio interaction is used — the system evolves autonomously through time.
 The **mosaic background continuously flashes and shifts subtly**, keeping the entire canvas in motion.
 
----
 
 ##  My Contribution
 
@@ -30,7 +29,6 @@ I was responsible for the following two parts of the project:
   - Right half: light brown (`#885138`)
 - Carefully controlled position and size via scaling and `offsetY` to align them flush with the base.
 
----
 
 ##  Animation Method & Individual Technique
 My animation approach is **time-controlled bouncing scale** using `millis()` and `sin()` functions:
