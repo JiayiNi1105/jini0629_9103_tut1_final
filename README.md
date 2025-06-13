@@ -41,9 +41,9 @@ scale(grow);
 ```
 ## Explanation
 
-millis() calculates the "age" of each trunk circle since its appearance started.
-sin(t * PI) produces a smooth curve for bouncing from 0 → 1 → 0.
-The grow factor combines linear progression with bounce for a more organic scaling effect.
+-millis() calculates the "age" of each trunk circle since its appearance started.
+-sin(t * PI) produces a smooth curve for bouncing from 0 → 1 → 0.
+-The grow factor combines linear progression with bounce for a more organic scaling effect.
 
 ## Difference from Teammates
 
