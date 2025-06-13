@@ -8,7 +8,7 @@ The **tree trunk's three circular segments** appear one by one in a bouncing, en
 Apple-like balls grow from the tree branches, also with a bouncing and scaling effect.
 The animation runs continuously, with growth, transformation, and restarting phases occurring automatically.
 No mouse, keyboard, or audio interaction is used — the system evolves autonomously through time.
-
+The **mosaic background continuously flashes and shifts subtly**, keeping the entire canvas in motion.
 ---
 
 ##  My Contribution
